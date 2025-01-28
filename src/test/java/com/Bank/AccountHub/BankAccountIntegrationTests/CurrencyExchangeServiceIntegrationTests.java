@@ -4,7 +4,6 @@ import com.Bank.AccountHub.Enums.CurrencyType;
 import com.Bank.AccountHub.Exceptions.ExchangeRateNotFoundException;
 import com.Bank.AccountHub.Exceptions.InvalidAmountException;
 import com.Bank.AccountHub.Services.CurrencyExchangeService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

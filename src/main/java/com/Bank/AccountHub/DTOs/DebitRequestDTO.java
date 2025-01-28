@@ -3,6 +3,7 @@ package com.Bank.AccountHub.DTOs;
 import com.Bank.AccountHub.Enums.CurrencyType;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 
 public class DebitRequestDTO {
