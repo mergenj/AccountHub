@@ -2,21 +2,17 @@ package com.Bank.AccountHub.Services;
 
 import com.Bank.AccountHub.Entities.Account;
 import com.Bank.AccountHub.Entities.CurrencyBalance;
-import com.Bank.AccountHub.Entities.Transaction;
 import com.Bank.AccountHub.Enums.CurrencyType;
-import com.Bank.AccountHub.Enums.TransactionType;
 import com.Bank.AccountHub.Exceptions.AccountNotFoundException;
 import com.Bank.AccountHub.Exceptions.CurrencyBalanceNotFound;
 import com.Bank.AccountHub.Exceptions.InsufficientBalance;
 import com.Bank.AccountHub.Exceptions.InvalidAmountException;
 import com.Bank.AccountHub.Repositories.AccountRepository;
-import com.Bank.AccountHub.Repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,9 +21,6 @@ public class AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
-
-    @Autowired
-    private TransactionRepository transactionRepository;
 
     @Autowired
     CurrencyExchangeService currencyExchangeService;
@@ -51,9 +44,6 @@ public class AccountService {
         }
         balance.setBalance(balance.getBalance().add(amount));
         accountRepository.save(account);
-
-        Transaction transaction = new Transaction(TransactionType.CREDIT, currency, amount, new Date(), account);
-        transactionRepository.save(transaction);
     }
 
     @Transactional
@@ -76,9 +66,6 @@ public class AccountService {
 
         balance.setBalance(balance.getBalance().subtract(amount));
         accountRepository.save(account);
-
-        Transaction transaction = new Transaction(TransactionType.DEBIT, currency, amount, new Date(), account);
-        transactionRepository.save(transaction);
     }
 
     public Map<CurrencyType, BigDecimal> getBalances(Long accountId) {
@@ -125,11 +112,5 @@ public class AccountService {
         toBalance.setBalance(toBalance.getBalance().add(convertedAmount));
 
         accountRepository.save(account);
-
-        Transaction transaction = new Transaction(TransactionType.DEBIT, fromCurrency, amount, new Date(), account);
-        transactionRepository.save(transaction);
-
-        Transaction exchangeTransaction = new Transaction(TransactionType.CREDIT, toCurrency, convertedAmount, new Date(), account);
-        transactionRepository.save(exchangeTransaction);
     }
 }

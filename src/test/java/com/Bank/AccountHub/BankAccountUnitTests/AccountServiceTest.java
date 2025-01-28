@@ -5,7 +5,6 @@ import com.Bank.AccountHub.Entities.CurrencyBalance;
 import com.Bank.AccountHub.Enums.CurrencyType;
 import com.Bank.AccountHub.Exceptions.InsufficientBalance;
 import com.Bank.AccountHub.Repositories.AccountRepository;
-import com.Bank.AccountHub.Repositories.TransactionRepository;
 import com.Bank.AccountHub.Services.AccountService;
 import com.Bank.AccountHub.Services.CurrencyExchangeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,9 +30,6 @@ class AccountServiceTest {
 
     @Mock
     private AccountRepository accountRepository;
-
-    @Mock
-    private TransactionRepository transactionRepository;
 
     @Mock
     private CurrencyExchangeService currencyExchangeService;
@@ -82,7 +78,7 @@ class AccountServiceTest {
         accountService.debit(1L, CurrencyType.USD, BigDecimal.valueOf(500));
 
         verify(accountRepository, times(1)).save(account);
-        assertEquals(BigDecimal.valueOf(500), account.getBalances().get(0).getBalance());
+        assertEquals(BigDecimal.valueOf(500), account.getBalances().getFirst().getBalance());
     }
 
     @Test
@@ -115,7 +111,7 @@ class AccountServiceTest {
         accountService.exchange(1L, CurrencyType.USD, CurrencyType.EUR, BigDecimal.valueOf(100));
 
         verify(accountRepository, times(1)).save(account);
-        assertEquals(BigDecimal.valueOf(900), account.getBalances().get(0).getBalance());
+        assertEquals(BigDecimal.valueOf(900), account.getBalances().getFirst().getBalance());
         assertTrue(account.getBalances().stream().anyMatch(b -> b.getCurrency() == CurrencyType.EUR && b.getBalance().equals(BigDecimal.valueOf(85))));
     }
 
