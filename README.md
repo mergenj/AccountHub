@@ -45,5 +45,6 @@ http://localhost:8080/swagger-ui/index.html
 
 ## Notes
 - The database is preloaded with sample data for testing.
+- Unit tests and Integration tests are implemented
 - Error handling is implemented for scenarios like invalid account IDs, insufficient funds, or invalid transaction amounts.
 
