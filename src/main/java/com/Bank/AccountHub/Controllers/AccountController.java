@@ -1,5 +1,8 @@
 package com.Bank.AccountHub.Controllers;
 
+import com.Bank.AccountHub.DTOs.DebitRequestDTO;
+import com.Bank.AccountHub.DTOs.DepositRequestDTO;
+import com.Bank.AccountHub.DTOs.ExchangeRequestDTO;
 import com.Bank.AccountHub.Enums.CurrencyType;
 import com.Bank.AccountHub.Exceptions.AccountNotFoundException;
 import com.Bank.AccountHub.Services.AccountService;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,10 +36,9 @@ public class AccountController {
 
     @PostMapping("/{accountId}/deposit")
     public ResponseEntity<String> deposit(@PathVariable Long accountId,
-                                          @RequestParam CurrencyType currency,
-                                          @RequestParam BigDecimal amount) {
+                                          @RequestBody DepositRequestDTO depositRequestDTO) {
         try {
-            accountService.deposit(accountId, currency, amount);
+            accountService.deposit(accountId, depositRequestDTO.getCurrency(), depositRequestDTO.getAmount());
         } catch (AccountNotFoundException e) {
             return ResponseEntity.badRequest().body("Account not found");
         }
@@ -44,9 +47,8 @@ public class AccountController {
 
     @PostMapping("/{accountId}/debit")
     public ResponseEntity<String> debit(@PathVariable Long accountId,
-                                        @RequestParam CurrencyType currency,
-                                        @RequestParam BigDecimal amount) {
-        accountService.debit(accountId, currency, amount);
+                                        @RequestBody DebitRequestDTO debitRequestDTO) {
+        accountService.debit(accountId, debitRequestDTO.getCurrency(), debitRequestDTO.getAmount());
         return ResponseEntity.ok("Debit successful");
     }
 
@@ -58,10 +60,8 @@ public class AccountController {
 
     @PostMapping("/{accountId}/exchange")
     public ResponseEntity<String> exchange(@PathVariable Long accountId,
-                                           @RequestParam CurrencyType fromCurrency,
-                                           @RequestParam CurrencyType toCurrency,
-                                           @RequestParam BigDecimal amount) {
-        accountService.exchange(accountId, fromCurrency, toCurrency, amount);
+                                           @RequestBody ExchangeRequestDTO exchangeRequestDTO) {
+        accountService.exchange(accountId, exchangeRequestDTO.getFromCurrency(), exchangeRequestDTO.getToCurrency(), exchangeRequestDTO.getAmount());
         return ResponseEntity.ok("Exchange successful");
     }
 
