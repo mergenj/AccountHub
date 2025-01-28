@@ -8,6 +8,7 @@ import com.Bank.AccountHub.Exceptions.AccountNotFoundException;
 import com.Bank.AccountHub.Services.AccountService;
 import com.Bank.AccountHub.Services.CurrencyExchangeService;
 import com.Bank.AccountHub.Services.ExternalApiService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,7 @@ public class AccountController {
 
     @PostMapping("/{accountId}/deposit")
     public ResponseEntity<String> deposit(@PathVariable Long accountId,
-                                          @RequestBody DepositRequestDTO depositRequestDTO) {
+                                          @Valid @RequestBody DepositRequestDTO depositRequestDTO) {
         try {
             accountService.deposit(accountId, depositRequestDTO.getCurrency(), depositRequestDTO.getAmount());
         } catch (AccountNotFoundException e) {
@@ -47,7 +48,7 @@ public class AccountController {
 
     @PostMapping("/{accountId}/debit")
     public ResponseEntity<String> debit(@PathVariable Long accountId,
-                                        @RequestBody DebitRequestDTO debitRequestDTO) {
+                                        @Valid @RequestBody DebitRequestDTO debitRequestDTO) {
         accountService.debit(accountId, debitRequestDTO.getCurrency(), debitRequestDTO.getAmount());
         return ResponseEntity.ok("Debit successful");
     }
@@ -60,7 +61,7 @@ public class AccountController {
 
     @PostMapping("/{accountId}/exchange")
     public ResponseEntity<String> exchange(@PathVariable Long accountId,
-                                           @RequestBody ExchangeRequestDTO exchangeRequestDTO) {
+                                           @Valid @RequestBody ExchangeRequestDTO exchangeRequestDTO) {
         accountService.exchange(accountId, exchangeRequestDTO.getFromCurrency(), exchangeRequestDTO.getToCurrency(), exchangeRequestDTO.getAmount());
         return ResponseEntity.ok("Exchange successful");
     }
